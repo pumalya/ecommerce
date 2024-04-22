@@ -37,13 +37,9 @@ const isAdmin = async (req, res, next) => {
     }
 };
 
-router.get("/", (req, res) => {
-    res.send("Hello World");
-});
-
 router.post("/api/auth/login", async (req, res, next) => {
     try {
-        res.send(await authenticate(req.body.email, req.body.password));
+        res.send(await authenticate(req.body.username, req.body.password));
         res.status(200);
     } catch (err) {
         next(err);
@@ -69,7 +65,7 @@ router.get("/api/products/:id", async (req, res, next) => {
 });
 
 router.post(
-    "/api/users/:id/cart/:product_id",
+    "APIURL/users/:id/cart/:product_id",
     isLoggedin,
     async (req, res, next) => {
         try {

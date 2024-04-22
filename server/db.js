@@ -2,6 +2,8 @@ const pg = require("pg");
 const client = new pg.Client(process.env.DATABASE_URL||"postgres://localhost/ecommerce");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const uuid = require("uuid");
+const JWT = process.env.JWT || "shhh";
 
 const createTables = async()=>{
     const SQL = `
@@ -69,7 +71,7 @@ const getAllUsers = async()=> {
     const response = await client.query(SQL);
     return response.rows;
 };
-const authenticate = async (username, password) => {
+const authenticate = async ({username, password}) => {
     const user = await client.query(
         `SELECT * FROM users WHERE username = $1`,
         [username]
@@ -176,11 +178,6 @@ const deleteCartItem = async (cart_id, product_id) => {
         [cart_id, product_id]
     );
 };
-
-
-
-
-
 
 
 module.exports = {
