@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { fetchSingleFoodItem } from "../ajaxHelpers";
+import { fetchProducts } from "../api";
+
 
 function ProductItem() {
     const [ item, setItem ] = useState("");
     const { id } = useParams();
 
-    const fetchItem = async()=> {
+    const fetchProductItem = async()=> {
         try {
-            const result = await fetchSingleItem(id);
+            const result = await fetchProducts(id);
             setItem(result);
             console.log(item);
         } catch (err) {
@@ -17,8 +18,10 @@ function ProductItem() {
     }
 
     useEffect(() => {
-        fetchItem();
-    }, []);
+        fetchProductItem();
+    }, );
+
+    fetchProductItem()
 
     return (
         <div>

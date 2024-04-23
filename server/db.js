@@ -5,19 +5,24 @@ const bcrypt = require("bcrypt");
 const uuid = require("uuid");
 const JWT = process.env.JWT || "shhh";
 
+const { categories, products } = require("./seeds");
+
 const createTables = async()=>{
     const SQL = `
         DROP TABLE IF EXISTS products;
+        DROP TABLE IF EXISTS categories;
         DROP TABLE IF EXISTS carts;
         DROP TABLE IF EXISTS orders;
         DROP TABLE IF EXISTS order_items;
         DROP TABLE IF EXISTS users;
+        
 
         CREATE TABLE users(
             id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
             username VARCHAR(50) UNIQUE NOT NULL,
             password VARCHAR(255) NOT NULL,
             email VARCHAR(255) UNIQUE NOT NULL,
+            isAdmin BOOLEAN DEFAULT FALSE
         );
 
         CREATE TABLE order_items (
@@ -41,6 +46,10 @@ const createTables = async()=>{
             quantity INT
         );
 
+        CREATE TABLE categories(
+            id SERIAL PRIMARY KEY NOT NULL,
+            name VARCHAR(255) NOT NULL
+        );
         
         CREATE TABLE products(
             id SERIAL PRIMARY KEY,
@@ -54,9 +63,9 @@ const createTables = async()=>{
     await client.query(SQL);
 };
 
-const createUser = async(user)=> {
+const createUser = async({username, password})=> {
     const SQL = `
-        INSERT INTO users (username, password, email)
+        INSERT INTO users (username, password, email, isAdmin)
         VALUES ($1, $2, $3)
         RETURNING *;
     `;
@@ -109,6 +118,11 @@ const userWithTokenAdmin = async(token)=> {
     }
 };
 
+const fetchUser = async(id)=> {
+    return(await client.query(`SELECT * FROM users WHERE id = $1;`, [id]))
+    .rows[0];
+}; 
+
 const getAllProducts = async()=> {
     const SQL = `SELECT * FROM products;`;
     const response = await client.query(SQL);
@@ -123,13 +137,12 @@ const getSingleProduct = async()=> {
 
 const createProduct = async()=> {
     const SQL = `
-    INSERT INTO products (name, description, price, category, quantity)
-    VALUES ($1, $2, $3, $4, $5)
+    INSERT INTO products (name, price, category, quantity)
+    VALUES ($1, $2, $3, $4)
     RETURNING * ;`;
 
     const newProduct = await client.query(SQL, [
         product.name,
-        product.description,
         product.price,
         product.category,
         product.quantity,
@@ -179,6 +192,40 @@ const deleteCartItem = async (cart_id, product_id) => {
     );
 };
 
+const createCategory = async (name) => {
+    const response = await client.query(
+        `INSERT INTO categories(name) VALUES($1) RETURNING *;`,
+        [name]
+    );
+    return response.rows[0];
+};
+
+const createCategories = async (categories) => {
+    for (let i = 0; i < categories.length; i++) {
+        console.log(await createCategory(categories[i]));
+    }
+};
+
+const fetchCategory = async (id) => {
+    return (await client.query(`SELECT * FROM categories WHERE id = $1;`, [id]))
+        .rows[0];
+};
+
+const fetchCategoryId = async (name) => {
+    return (
+        await client.query(`SELECT id FROM categories WHERE name = $1;`, [name])
+    ).rows[0].id;
+};
+
+const fetchCategories = async () => {
+    const response = await client.query(`SELECT * FROM categories;`);
+    return response.rows;
+};
+
+const deleteCategory = async (id) => {
+    await client.query(`DELETE FROM categories WHERE id = $1`, [id]);
+};
+
 
 module.exports = {
     client,
@@ -188,6 +235,7 @@ module.exports = {
     authenticate,
     userWithToken,
     userWithTokenAdmin, 
+    fetchUser,
     getAllProducts,
     getSingleProduct,
     createProduct,
@@ -195,4 +243,10 @@ module.exports = {
     addItemToCart,
     fetchCartItems,
     deleteCartItem,
+    createCategories,
+    createCategory,
+    fetchCategory,
+    fetchCategoryId,
+    fetchCategories,
+    deleteCategory,
 };

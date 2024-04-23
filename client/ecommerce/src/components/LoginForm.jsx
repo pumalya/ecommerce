@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { fetchUser } from "../ajaxHelpers";
-// import { Register } from "/Register";
+import { fetchUser } from "../api";
 
 export default function LoginForm ({ setToken }) {
     const [username, setUsername] = useState("");

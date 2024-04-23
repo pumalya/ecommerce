@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function Products({ products }) {
-    const [productList, setProductList] = useState(products);
+export default function productItem({ productItem }) {
+    const [productList, setProductList] = useState(productItem);
     const [searchItem, setSearchItem] = useState("");
     const navigate = useNavigate();
 
-    const search = (event) => {
-    const foundItem = products.filter((products) => {
-        return `${products} ${products.category} ${products.price}`
+    const search = (e) => {
+    const foundItem = productItem.filter((productItem) => {
+        return `${productItem} ${productItem.category} ${productItem.price}`
         .toLowerCase()
         .includes(e.target.value.toLowerCase());
     });
@@ -17,7 +17,7 @@ export default function Products({ products }) {
     };
 
     return(
-        <div id="products-list">
+        <div id="productItem-list">
             <div id="search-container">
                 <input 
                 type="text"
@@ -26,8 +26,8 @@ export default function Products({ products }) {
                 onChange={search}
                 />
             </div>
-            <h1>Products</h1>
-            <div id="products">
+            <h1>productItem</h1>
+            <div id="productItem">
                 {
                     productList && productList.map((productItem)=> {
                         return(
@@ -35,7 +35,7 @@ export default function Products({ products }) {
                                 <h3>{productItem.name}</h3>
                                 <p>Price: ${productItem.price}</p>
                                 <div>
-                                    <button onClick={()=> navigate(`/productItems/${productItem.id}`)}>
+                                    <button onClick={()=> navigate(`/productItem/${productItem.id}`)}>
                                         Details
                                     </button>
                                 </div> 

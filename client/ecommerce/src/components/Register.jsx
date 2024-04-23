@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { createUser } from "../ajaxHelpers";
 
 export default function Register({ setToken }) {
     const [username, setUsername] = useState("");
@@ -15,19 +14,18 @@ export default function Register({ setToken }) {
             !password ||
             password.length < 8;
         if (condition) {
-            const errMessage =
-            "Please make sure you filled out all requested info and that your password is at least 8 characters long";
-        throw Err(errMessage);
+            const errMessage = "Please try again";
+        throw err(errMessage);
         }
         const userData = {
-            username: username
+            username: username,
             password: password,
             isAdmin: isAdmin,
         };
         const result = await createUser(userData);
         setToken(result.token);
         } catch (err) {
-            setError(err.message);
+            setErr(err.message);
         }
     }
     return (

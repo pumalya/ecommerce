@@ -65,7 +65,7 @@ router.get("/api/products/:id", async (req, res, next) => {
 });
 
 router.post(
-    "APIURL/users/:id/cart/:product_id",
+    "/api/users/:id/cart/:product_id",
     isLoggedin,
     async (req, res, next) => {
         try {
@@ -84,7 +84,7 @@ router.post(
 );
 
   // Protected Routes Only for Admins
-router.get("/api/users", isAdmin, async (req, res, next) => {
+router.get("/api/loginForm", isAdmin, async (req, res, next) => {
     try {
         res.send(await getAllUsers());
         res.status(200);

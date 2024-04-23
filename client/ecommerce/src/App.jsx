@@ -1,63 +1,30 @@
-import { useState, useEffect } from 'react'
 import LoginForm from './components/LoginForm';
-const Login = ({ login })=> {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+import Cart from './components/Cart';
+import Products from "./components/Products";
+import ProductItem from './components/productItem';
+import Register from './components/Register';
+import { Routes, Route, Link } from "react-router-dom";
 
-  const submit = ev => {
-    ev.preventDefault();
-    login({ username, password });
-  }
+const App = () => {
+  
   return (
-    <form onSubmit={ submit }>
-      <input value={ username } placeholder='username' onChange={ ev=> setUsername(ev.target.value)}/>
-      <input value={ password} placeholder='password' onChange={ ev=> setPassword(ev.target.value)}/>
-      <button disabled={ !username || !password }>Login</button>
-    </form>
+    <>
+    <nav>
+        <Link to = "/">My Cart</Link>
+        <Link to = "/">Categories</Link>
+        <Link to = "/components/Register">Create an account</Link>
+        <Link to = "/"></Link>
+        
+      </nav>
+      <Routes>
+        <Route path="/loginForm" element={<LoginForm />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="products" element={<Products />} />
+        <Route path="productItem" element={<ProductItem />} />
+        <Route path="/cart" element={<Cart />} />
+      </Routes>
+    </>
   );
-}
-function App() {
-  const [auth, setAuth] = useState({});
-  const [products, setProducts] = useState([]);
-  const [cart, setCart] = useState([]);
-
-  useEffect(()=> {
-    attemptLoginWithToken();
-  }, []);
-
-  const attemptLoginWithToken = async()=> {
-    const token = window.localStorage.getItem('token');
-    if(token){
-      const response = await fetch(`/api/auth/me`, {
-        headers: {
-          authorization: token
-        }
-      });
-      const json = await response.json();
-      if(response.ok){
-        setAuth(json);
-      }
-      else {
-        window.localStorage.removeItem('token');
-      }
-    }
-  };
-
-  useEffect(()=> {
-    const fetchProducts = async()=> {
-      const response = await fetch('APIURL/products');
-      const json = await response.json();
-      setProducts(json);
-    };
-
-    fetchProducts();
-  }, []);
-
-  
-
-  
-  
-  
-}
+};
 
 export default App
