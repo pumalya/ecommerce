@@ -1,19 +1,19 @@
 require("dotenv").config();
-const express = require('express')
-const app = express()
-const apiRouter = require("../RoutesAPI");
+const express = require("express");
+const app = express();
+const apiRouter = require("../Routes");
 const path = require("path");
 const cors = require("cors");
 
 app.use(cors());
 app.use(express.json());
 app.use(require("morgan")("dev"));
-app.use(express.static(path.join()));
-app.use(express.static(path.join()));
-app.use(express.static(path.join()));
+app.use(express.static(path.join(__dirname, "images")));
+app.use(express.static(path.join(__dirname, "..", "..", "client", "ecommerce", "dist")));
+app.use(express.static(path.join(__dirname, "..", "..", "client", "ecommerce", "dist", "index.html")));
 app.use("/api", apiRouter);
 
-const initFunctions = require("../seeds.js");
+const initFunctions = require("../db");
 app.use((err, req, res, next) => {
     console.log(err);
     res.status(err.status || 1000)

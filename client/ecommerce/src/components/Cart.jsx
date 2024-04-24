@@ -4,7 +4,6 @@ import { useParams } from "react-router-dom";
 const API = "http://localhost:3000/api";
 
 export default function Cart({ token, setToken }) {
-    console.log("Loaded");
     const params = useParams();
     const productId = params.productId;
     const [ cart, setCart ] = useState("");
@@ -13,7 +12,7 @@ export default function Cart({ token, setToken }) {
         async function fetchCart() {
             console.log("downloading items");
             try{
-                const response = await fetch(`${API}/api/carts/${userId}`,);
+                const response = await fetch(`${API}/api/cart/${userId}`,);
                 console.log(response);
                 const result= await response.json();
                 console.log("download: ", result);
@@ -32,6 +31,9 @@ export default function Cart({ token, setToken }) {
                     <li className="producttitle">{cart.title}</li>
                     <li className="productprice">{cart.author}</li>
                     <li className="description">{cart.description}</li>
+                    <li>
+                        <img src={cart.coverimage} alt={cart.title} />
+                    </li>
                     <li>{cart.available}</li>
                     <button onClick={async()=> {
                         await addItemToCart(productId);

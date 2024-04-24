@@ -3,11 +3,11 @@ import { Navigate } from "react-router-dom";
 const API = "http://localhost:3000/api";
 
 export default function Register({ setToken }) {
-    const [username, setUsername] = useState("");
+    const [Name, setName] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [isAdmin, setIsAdmin] = useState("false");
     const [loggedIn, setLoggedIn] = useState(false);
-    const [err, setErr] = useState("");
+    const [error, setError] = useState("");
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -18,7 +18,8 @@ export default function Register({ setToken }) {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    username: username,
+                    name: Name,
+                    email: email,
                     password: password,
                 }),
             });
@@ -28,8 +29,8 @@ export default function Register({ setToken }) {
             console.log(result);
             setToken(token);
             setLoggedIn(true);
-        } catch (err) {
-        console.error(err);
+        } catch (error) {
+            console.error(error);
         }
     }
     if (loggedIn) {
@@ -41,24 +42,35 @@ export default function Register({ setToken }) {
             <div className="regcontainer">
                 <h2>Register for a New Account</h2>
                 <form onSubmit={handleSubmit}>
-                <h2>Username</h2>
-                {err && <p>{err}</p>}
+                <h2>Name</h2>
+                {error && <p>{error}</p>}
                 <label>
-                Username:
+                    Name:
                 <input
-                name="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                    name="Name"
+                    value={Name}
+                    onChange={(e) => setName(e.target.value)}
                 />
                 </label>
+
+                <h2>Email</h2>
+                <label>
+                    Email:
+                <input
+                name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                />
+                </label>
+
                 <h2>Password</h2>
                 <label>
                 Password:
                 <input
-                name="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                    name="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                 />
                 </label>
                 <button type="submit">Register</button>

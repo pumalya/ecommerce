@@ -4,22 +4,22 @@ const API = "http://localhost:3000/api";
 
 
 export default function LoginForm ({ setToken }) {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [err, setErr] = useState("");
+    const [ Email, setEmail ] = useState("");
+    const [ Password, setPassword ] = useState("");
+    const [error, setError] = useState(null);
     const [loggedIn, setLoggedIn ] = useState(false);
 
     async function handleSubmit(e) {
         e.preventDefault();
         try {
-            const response = await fetch(`${API}/login`, {
+            const response = await fetch(`${API}/loginform`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                username: username,
-                password: password,
+                    email: Email,
+                    password: Password,
                 }),
             });
             console.log("response", response);
@@ -28,8 +28,8 @@ export default function LoginForm ({ setToken }) {
             const token = result.token;
             setToken(token);
             setLoggedIn(true);
-        } catch (err) {
-            console.error(err);
+        } catch (error) {
+            console.error(error);
             }
         }
     if (loggedIn) {
@@ -37,29 +37,32 @@ export default function LoginForm ({ setToken }) {
     }
     return (
         <>
-        <div id="loginForm">
+        <div className="logincontainer">
             <h2>Log In</h2>
-            <form id="login" onSubmit={handleSubmit}>
-                {err && <p>{err}</p>}
-            <label>
-                <h3>Username:{" "}</h3>
-                <input 
-                    name="username"
-                    value={username} 
-                    onChange={(e) => setUsername(e.target.value)} />
+            <form onSubmit={handleSubmit}>
+                <h2>Email </h2>
+                {error && <p>{error}</p>}
+                <label>
+                    Email:
+                    <input 
+                    name="Email"
+                    value={Email} 
+                    onChange={(e) => setEmail(e.target.value)} />
             </label>
+            <h2>Password</h2>
+            {error && <p>{error}</p>}
             <label>
-                <h3>Password:{""}</h3>
+                Password:{""}
                 <input
                     type="password"
-                    value={password}
-                    placeholder="password"
+                    value={Password}
+                    name="Password"
                     onChange={(e) => setPassword(e.target.value)}
                 />
             </label>
             <button type="submit">Submit</button>
             </form>
         </div>
-    </>
+        </>
     );
 }

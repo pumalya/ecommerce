@@ -4,8 +4,8 @@ import Products from "./Products";
 export default function Home() {
     return(
         <>
-        <div>
-            <h1>Welcome to your local corner shop</h1>
+        <div className="Storefront-container">
+            <h1>Welcome to your Pokémon cards store</h1>
         </div>
 
         <Products />

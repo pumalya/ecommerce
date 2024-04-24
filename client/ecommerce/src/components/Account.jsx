@@ -59,30 +59,6 @@ export default function Account ({ token, setToken}) {
         {err && <p>{err}</p>}
         {accounts(
             <div>
-                <ul>
-                {/* <li>Name: {accounts.name}</li>
-            <li>Email: {accounts.email}</li>
-            <li>
-              Carts:
-              <ul>
-                {accounts.Carts.map((cart) => {
-                  return (
-                    <div>
-                      <li key={cart.id}>{cart.title}</li>
-
-                      <button
-                        onClick={async () => {
-                          await deleteCarts(cart.id);
-                          downloadUser();
-                        }}
-                      >
-                        Return cart
-                      </button>
-                    </div>
-                  );
-                })}
-              </ul>
-            </li> */} </ul>
                 <button token={token} onClick={handleLogout}>Log out</button>
             </div>
         )}

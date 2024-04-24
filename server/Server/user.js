@@ -1,10 +1,10 @@
-const { client } = require("./seed.js");
+const { client } = require("./db.js");
 const uuid = require("uuid");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const JWT = process.env.JWT || "shhh";
 if (JWT === "shhh") {
-    console.log("jwt functional");
+    console.log("jwt is working");
 }
 
 async function createUser({ name, password, email }) {

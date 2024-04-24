@@ -2,7 +2,7 @@ const { client } = require("./index.js");
 const uuid = require("uuid");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const JWT = process.env.JWT_SECRET || "shhh";
+const JWT = process.env.JWT || "shhh";
 if (JWT === "shhh") {
   console.log("jwt functional");
 }
@@ -32,7 +32,6 @@ const deleteCarts = async (user_id, product_id) => {
     FROM carts
     WHERE user_id = $1 AND product_id = $2; `;
   const response = await client.query(SQL, [user_id, product_id]);
-
   return response.rows;
 };
 

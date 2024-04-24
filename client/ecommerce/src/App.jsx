@@ -5,6 +5,7 @@ import Cart from './components/Cart';
 import Navigation from './components/Navigation';
 import Products from "./components/Products";
 import Register from './components/Register';
+import SingleProduct from './components/SingleProduct';
 import { Routes, Route} from "react-router-dom";
 import { useState, useEffect } from 'react';
 
@@ -18,19 +19,19 @@ const App = () => {
 
   return (
     <>
-    <div id="navbar">
-      <Navigation token={token} setToken={setToken} />
+      <div id="navbar">
+        <Navigation token={token} setToken={setToken} />
       </div>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/Login" element={<LoginForm token={token} setToken={setToken} />} />
-        <Route path="/Register" element={<Register token={token} setToken={setToken} />} />
+        <Route path="/LoginForm" element={<LoginForm token={token} setToken={setToken} />} />
         <Route path="/Products" element={<Products />} />
+        <Route path="/Register" element={<Register token={token} setToken={setToken} />} />
         <Route path="/Cart" element={<Cart token={token} setToken={setToken} />} />
         <Route path="/Account" element={<Account token={token} setToken={setToken} />} />
       </Routes>
     </>
   );
-};
+}
 
 export default App
