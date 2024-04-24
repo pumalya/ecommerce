@@ -2,6 +2,7 @@ const pg = require("pg");
 const client = new pg.Client(process.env.DATABASE_URL||"postgres://localhost/ecommerce");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const { query } = require("express");
 const uuid = require("uuid");
 const JWT = process.env.JWT || "shhh";
 

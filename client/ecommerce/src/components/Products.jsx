@@ -1,48 +1,65 @@
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+const API = "http://localhost:3000/api";
 
-export default function productItem({ productItem }) {
-    const [productList, setProductList] = useState(productItem);
-    const [searchItem, setSearchItem] = useState("");
+
+export default function Products({ token}) {
+    const [products, setProducts] = useState([]);
     const navigate = useNavigate();
 
-    const search = (e) => {
-    const foundItem = productItem.filter((productItem) => {
-        return `${productItem} ${productItem.category} ${productItem.price}`
-        .toLowerCase()
-        .includes(e.target.value.toLowerCase());
-    });
-    setProductList(foundItem);
-    setSearchItem(e.target.value);
-    };
+    useEffect(()=> {
+        async function fetchProducts() {
+            try{
+                const response = await fetch(`${API}/products`);
+                const data = await response.json();
+                console.log(data);
+                setProducts(data);
+            } catch(err) {
+                console.error(err);
+            }
+        }
+        fetchProducts();
+    }, []);
 
-    return(
-        <div id="productItem-list">
-            <div id="search-container">
-                <input 
-                type="text"
-                placeholder="Search for a product"
-                value={searchItem}
-                onChange={search}
-                />
+    const handleProductsClick = async (productId, userId)=> {
+        try{
+            const response = await fetch(`${API}/carts/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                    body: JSON.stringify({
+                        user_id: userId,
+                        product_id: productId,
+                    }),
+                },
+            });
+            if (response.ok) {
+                navigate(`/carts`);
+            } else {
+                console.error("Failed to add product to cart");
+            }
+        } catch (err) {
+                console.error(err);
+        }
+    };
+    return (
+        <>
+            <div className="Products-container">
+                {products && products.map((product) => {
+                    return (
+                        <div key={product.id} className="products-container">
+                            <p className="products-name">{product.name}</p>
+                            <p className="products-price">${product.price}</p>
+                            <p>{product.available}</p>
+                            <button onClick={() => handleProductsClick(product.id)}>
+                            Add To Cart
+                            </button>
+                        </div>
+                    );
+                })}
             </div>
-            <h1>productItem</h1>
-            <div id="productItem">
-                {
-                    productList && productList.map((productItem)=> {
-                        return(
-                            <div className="producItem" key={productItem.id}>
-                                <h3>{productItem.name}</h3>
-                                <p>Price: ${productItem.price}</p>
-                                <div>
-                                    <button onClick={()=> navigate(`/productItem/${productItem.id}`)}>
-                                        Details
-                                    </button>
-                                </div> 
-                            </div>
-                        );
-                    })}
-            </div>
-        </div>
-    );
+        </>
+        );
 }

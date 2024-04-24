@@ -1,21 +1,43 @@
-import React from "react";
-import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
-const CartProduct = ({productItem})=> {
-    const { removefromCart, increaseAmount, decreaseAmount }  = useContext(CartContext);
-    const { id, name, category, price, quantity } = item;
-    
+const API = "http://localhost:3000/api";
+
+export default function Cart({ token, setToken }) {
+    console.log("Loaded");
+    const params = useParams();
+    const productId = params.productId;
+    const [ cart, setCart ] = useState("");
+
+    useEffect(()=> {
+        async function fetchCart() {
+            console.log("downloading items");
+            try{
+                const response = await fetch(`${API}/api/carts/${userId}`,);
+                console.log(response);
+                const result= await response.json();
+                console.log("download: ", result);
+                setCart(result.product);
+            } catch(err) {
+                console.error(err);
+            }
+        }
+        fetchCart();
+    }, [userId]);
+
     return (
         <div>
-            <div>
-                <Link to={`/products/${id}`}></Link>
-            </div>
-            <div onClick={()=>removefromCart(id)}></div>
-            <div onClick={() => decreaseAmount(id)}></div>
-            <div onClick={() => increaseAmount(id)}></div>
+            {cart && (
+                <ul>
+                    <li className="producttitle">{cart.title}</li>
+                    <li className="productprice">{cart.author}</li>
+                    <li className="description">{cart.description}</li>
+                    <li>{cart.available}</li>
+                    <button onClick={async()=> {
+                        await addItemToCart(productId);
+                    }}>Checkout</button>
+                </ul>
+            )}
         </div>
-    )
+    );
 }
-
-export default CartProduct
