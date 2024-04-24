@@ -6,45 +6,33 @@ const { query } = require("express");
 const uuid = require("uuid");
 const JWT = process.env.JWT || "shhh";
 
-const { categories, products } = require("./seeds");
+const { categories, products } = require("../seeds");
 
-const createTables = async()=>{
+const dropTables = async()=>{
     const SQL = `
         DROP TABLE IF EXISTS products;
         DROP TABLE IF EXISTS categories;
         DROP TABLE IF EXISTS carts;
-        DROP TABLE IF EXISTS orders;
-        DROP TABLE IF EXISTS order_items;
+        DROP TABLE IF EXISTS quantity;
         DROP TABLE IF EXISTS users;
+        `;
+        await client.query(SQL);
+};
         
-
+const createTables = async()=> {
+    const SQL = `
         CREATE TABLE users(
             id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
             username VARCHAR(50) UNIQUE NOT NULL,
             password VARCHAR(255) NOT NULL,
             email VARCHAR(255) UNIQUE NOT NULL,
-            isAdmin BOOLEAN DEFAULT FALSE
-        );
-
-        CREATE TABLE order_items (
-            id SERIAL PRIMARY KEY,
-            order_id INT REFERENCES order(id),
-            product_id INT REFERENCES products(id),
-            quantity INT,
-            price DECIMAL
-        );
-        
-        CREATE TABLE orders (
-            id SERIAL PRIMARY KEY,
-            user_id UUID REFERENCES user(id),
-            total_price DECIMAL,
-            status VARCHAR
         );
 
         CREATE TABLE carts(
             id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
             user_id UUID REFERENCES user(id),
-            quantity INT
+            product_id UUID REFERENCES products(id),
+            CONSTRAINT unique_product_user UNIQUE (user_id, product_id)
         );
 
         CREATE TABLE categories(

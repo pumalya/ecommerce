@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const pg = require("pg")
 const PORT = process.env.PORT || 3000;
-const { client, createTables } = require("./db.js");
+const { client, createTables } = require("./Server/db.js");
 app.use(require("morgan"), ("dev"))
 app.use(express.json());
 

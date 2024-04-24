@@ -13,7 +13,7 @@ const {
     addItemToCart,
     fetchCartItems,
     deleteCartItem,
-} = require("./db");
+} = require("./Server/db");
 const router = express.Router();
 
 const isLoggedin = async (req, res, next) => {
@@ -83,7 +83,6 @@ router.post(
     }
 );
 
-  // Protected Routes Only for Admins
 router.get("/api/loginForm", isAdmin, async (req, res, next) => {
     try {
         res.send(await getAllUsers());

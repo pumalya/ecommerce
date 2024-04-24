@@ -13,7 +13,7 @@ app.use(express.static(path.join()));
 app.use(express.static(path.join()));
 app.use("/api", apiRouter);
 
-const initFunctions = require("./seeds.js");
+const initFunctions = require("../seeds.js");
 app.use((err, req, res, next) => {
     console.log(err);
     res.status(err.status || 1000)
