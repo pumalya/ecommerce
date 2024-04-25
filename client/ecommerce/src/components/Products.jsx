@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 const API = "http://localhost:3000/api";
 
 
-export default function Products() {
+export default function Products({token}) {
     const [products, setProducts] = useState([]);
     const navigate = useNavigate();
 
@@ -28,7 +27,7 @@ export default function Products() {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `Bearer ${ token }`,
                     body: JSON.stringify({
                         user_id: userId,
                         product_id: productId,

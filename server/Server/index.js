@@ -10,14 +10,15 @@ app.use(express.json());
 app.use(require("morgan")("dev"));
 app.use(express.static(path.join(__dirname, "images")));
 app.use(express.static(path.join(__dirname, "..", "..", "client", "ecommerce", "dist")));
-app.use(express.static(path.join(__dirname, "..", "..", "client", "ecommerce", "dist", "index.html")));
+app.use("/",express.static(path.join(__dirname, "..", "..", "client", "ecommerce", "dist", "index.html")));
 app.use("/api", apiRouter);
 
-const initFunctions = require("../db");
+const initFunctions = require("./db.js");
 app.use((err, req, res, next) => {
     console.log(err);
-    res.status(err.status || 1000)
-        .send({ err: err.message ? err.message : err });
+    res
+        .status(err.status || 500)
+        .send({ error: err.message ? err.message : err });
 });
 
 const isLoggedIn = async(req, res, next) => {
@@ -48,4 +49,4 @@ const init = async () => {
     app.listen(port, () => console.log(`listening on port ${port}`));
 };
 
-init()
+init();

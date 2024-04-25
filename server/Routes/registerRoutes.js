@@ -1,10 +1,9 @@
 const jwt = require("jsonwebtoken");
-const JWT = process.env.JWT || "shhh";
+const JWT = process.env.JWT_SECRET || "shhh";
 if (JWT === "shhh") {
     console.log("jwt functional");
 }
 const express = require("express");
-
 const registerRouter = express.Router();
 
 const bcrypt = require("bcrypt");

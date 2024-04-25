@@ -3,11 +3,11 @@ import { Navigate } from "react-router-dom";
 
 const API = "http://localhost:3000/api";
 
-export default function Account ({ token, setToken}) {
+function Account ({ token, setToken}) {
     console.log("account", token);
 
     const [accounts, setAccounts] = useState("");
-    const [err, setErr] = useState();
+    const [error, setError] = useState();
 
     async function downloadUser() {
         try{
@@ -21,13 +21,13 @@ export default function Account ({ token, setToken}) {
             const result = await response.jso();
             console.log(result);
             setAccounts(result);
-        } catch(err) {
-            console.error(err);
+        } catch(error) {
+            console.error(error);
         }
     }
 
     async function deleteCarts(userId) {
-        try{
+        try {
             const response = await fetch(`${API}/api/carts/${userId}`, {
                 method: "DELETE",
                 headers: {
@@ -36,12 +36,12 @@ export default function Account ({ token, setToken}) {
                 },
             });
             const result = await response.json();
+    
             console.log(result);
-        } catch(err) {
-            console.error(err);
+        } catch (error) {
+            console.error(error);
         }
     }
-
     const handleLogout = ()=> {
         localStorage.removeItem("token");
         setToken("");
@@ -56,8 +56,8 @@ export default function Account ({ token, setToken}) {
     return(
         <>
         {!token && <Navigate to="/" replace={true} />}
-        {err && <p>{err}</p>}
-        {accounts(
+        {error && <p>{error}</p>}
+        {accounts && (
             <div>
                 <button token={token} onClick={handleLogout}>Log out</button>
             </div>
@@ -65,3 +65,4 @@ export default function Account ({ token, setToken}) {
         </>
     );
 }
+export default Account;

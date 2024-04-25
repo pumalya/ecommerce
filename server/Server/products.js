@@ -9,18 +9,20 @@ if (JWT === "shhh") {
 
 async function createProducts({ price, password }) {
     const SQL = `
-    INSERT INTO products(price, password) VALUES($1, $2, $3) RETURNING * `;
+    INSERT INTO products(price, password) VALUES($1, $2, $3) RETURNING * 
+    `;
     const response = await client.query(SQL, [
         uuid.v4(),
         price,
-        await bcrypt.hash(password, 5),
+        await bcrypt.hash(password, 7),
     ]);
     return response.rows[0];
 }
 
 async function fetchProducts() {
     const SQL = `
-    SELECT id, price FROM products; `;
+    SELECT id, price FROM products; 
+    `;
     const response = await client.query(SQL);
     return response.rows;
 }
@@ -36,7 +38,8 @@ async function findProductsWithToken(token) {
         throw error;
     }
     const SQL = `
-        SELECT id, price FROM products WHERE id=$1; `;
+        SELECT id, price FROM products WHERE id=$1; 
+        `;
     const response = await client.query(SQL, [id]);
     if (!response.rows.length) {
         const error = Error("not authorized");
@@ -48,7 +51,8 @@ async function findProductsWithToken(token) {
 
 async function authenticate({ id, password }) {
     const SQL = `
-    SELECT id, price, password FROM products WHERE price=$1; `;
+    SELECT id, price, password FROM products WHERE price=$1; 
+    `;
     const response = await client.query(SQL, [id]);
     if (
         !response.rows.length ||

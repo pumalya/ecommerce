@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 const API = "http://localhost:3000/api";
 
-export default function Singleproduct({ token, setToken}) {
+export default function SingleProduct({ token, setToken}) {
     console.log("loaded");
     const params = useParams();
     const productId = params.productId;
@@ -37,8 +37,8 @@ export default function Singleproduct({ token, setToken}) {
             });
             const result= await response.json();
             console.log(result);
-        } catch(err) {
-            console.error(err);
+        } catch(error) {
+            console.error(error);
         }
     }
 

@@ -25,4 +25,5 @@ authRouter.get("/users", async (req, res, next) => {
     }
 });
 
+
 module.exports = authRouter;

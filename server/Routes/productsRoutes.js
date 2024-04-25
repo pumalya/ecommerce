@@ -1,7 +1,7 @@
 const express = require("express");
 
 const productsRouter = express.Router();
-const client = require("../Server/db.js");
+const client = require("../Server/db");
 
 productsRouter.get(async (req, res, next) => {
     try {

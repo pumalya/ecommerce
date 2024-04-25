@@ -1,11 +1,14 @@
 const pg = require("pg");
-const client = new pg.Client(process.env.DATABASE_URL||"postgres://localhost/ecommerce");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { query } = require("express");
 const { v4: uuidv4 } = require("uuid");
-const JWT = process.env.JWT || "shhh";
+const client = new pg.Client(
+    process.env.DATABASE_URL || "postgres://localhost/ecommerce"
+);
 
+const JWT = process.env.JWT_SECRET || "shhh";
+const UUID = "uuid";
 const dropTables = async()=>{
     const SQL = `
         DROP TABLE IF EXISTS products;
@@ -21,14 +24,14 @@ const createTables = async()=> {
     const SQL = `
         CREATE TABLE users(
             id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-            username VARCHAR(50) UNIQUE NOT NULL,
+            name VARCHAR(50) NOT NULL,
             password VARCHAR(255) NOT NULL,
             email VARCHAR(255) UNIQUE NOT NULL,
         );
 
         CREATE TABLE carts(
             id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-            user_id UUID REFERENCES user(id),
+            user_id UUID REFERENCES users(id),
             product_id UUID REFERENCES products(id),
             CONSTRAINT unique_product_user UNIQUE (user_id, product_id)
         );
@@ -51,16 +54,17 @@ const createTables = async()=> {
 const seedUsers = async()=> {
     const SQL = `
     INSERT INTO users (name, password, email) VALUES 
-        ("Tim", $1, "atim@gmail.uk"),
-        ("Allen", $2, "ballen@gmail.uk"),
-        ("Violet", $3, "mviolet@gmail.uk"),
-        ("Moon", $4, "kaymoon@gmail.uk"),
-        ("Kayla", $5, "jkayla@gmail.uk"),
-        ("Roy", $6, "wwroy@gmail.uk"),
-        ("Layla", $7, "hlayla@gmail.uk"),
-        ("Eugene", $8, "qeugene@gmail.uk"),
-        ("Woodhy", $9, "bwoodhy@gmail.uk")
-        RETURNING * ;
+        ("Tim",$1,"atim@gmail.uk"),
+        ("Allen",$2,"ballen@gmail.uk"),
+        ("Violet",$3,"mviolet@gmail.uk"),
+        ("Moon",$4,"kaymoon@gmail.uk"),
+        ("Kayla",$5,"jkayla@gmail.uk"),
+        ("Roy",$6,"wwroy@gmail.uk"),
+        ("Layla",$7,"hlayla@gmail.uk"),
+        ("Eugene",$8,"qeugene@gmail.uk"),
+        ("Woodhy",$9,"bwoodhy@gmail.uk")
+        RETURNING * 
+        ;
     `;
 
     const result = await client.query(SQL, [
@@ -96,7 +100,8 @@ const seedProducts = async()=> {
     ("Typhlosion9", "110"),
     ("Umbreon9", "650"),
     ("Venusaur10", "350")
-    RETURNING * ;
+    RETURNING * 
+    ;
     `;
     const result = await client.query(SQL);
     return result.rows;
@@ -137,6 +142,7 @@ const seedProductImages = async(products)=> {
         products[15].id,
         "Venusaur10.jpg"
     ];
+
     const SQL = `
     INSERT INTO productImages (product_id, name) VALUES
     ($1,$2),
@@ -290,6 +296,7 @@ const fetchProductsImages = async (products_id) => {
         where id =$1
         `;
     const response = await client.query(SQL, [products_id]);
+    return response.rows;
 };
 const fetchAllProductsImages = async () => {
     const SQL = `
@@ -300,7 +307,7 @@ const fetchAllProductsImages = async () => {
 };
 const Carts = async (user_id, product_id) => {
     const SQL = `
-        INSERT INTO users_products(id, user_id,product_id)
+        INSERT INTO users_products(id, user_id, product_id)
         VALUES($1 ,$2, $3)
         `;
     const response = await client.query(SQL, [uuidv4(), user_id, product_id]);
@@ -309,6 +316,9 @@ const Carts = async (user_id, product_id) => {
 
 module.exports = {
     seed,
+    seedCarts,
+    seedProductImages,
+    seedProducts,
     client,
     fetchProductsImages,
     fetchAllProductsImages,

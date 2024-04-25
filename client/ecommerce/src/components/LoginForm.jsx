@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 const API = "http://localhost:3000/api";
 
 
-export default function LoginForm ({ setToken }) {
+export default function LoginForm ({ token, setToken }) {
     const [ Email, setEmail ] = useState("");
     const [ Password, setPassword ] = useState("");
     const [error, setError] = useState(null);
