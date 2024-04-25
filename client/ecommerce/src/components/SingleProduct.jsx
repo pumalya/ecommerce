@@ -46,7 +46,7 @@ export default function SingleProduct({ token, setToken}) {
     return (
         <div>
             {singleProduct && (
-                <ul>
+                <li>
                     <li className ="producttitle">{singleProduct.title}</li>
                     <li className ="productauthor">{singleProduct.author}</li>
                     <li className ="description">{singleProduct.description}</li>
@@ -61,7 +61,7 @@ export default function SingleProduct({ token, setToken}) {
                     >
                     Checkout
                     </button>
-                </ul>
+                </li>
             )}
         </div>
     );

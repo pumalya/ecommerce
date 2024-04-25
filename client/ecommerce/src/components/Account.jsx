@@ -59,8 +59,35 @@ function Account ({ token, setToken}) {
         {error && <p>{error}</p>}
         {accounts && (
             <div>
-                <button token={token} onClick={handleLogout}>Log out</button>
-            </div>
+            <ul>
+              {/* <li>Name: {accounts.name}</li>
+              <li>Email: {accounts.email}</li>
+              <li>
+                Carts:
+                <ul>
+                  {accounts.Carts.map((cart) => {
+                    return (
+                      <div>
+                        <li key={cart.id}>{cart.title}</li>
+  
+                        <button
+                          onClick={async () => {
+                            await deleteCarts(cart.id);
+                            downloadUser();
+                          }}
+                        >
+                          Return cart
+                        </button>
+                      </div>
+                    );
+                  })}
+                </ul>
+              </li> */}
+            </ul>
+            <button token={token} onClick={handleLogout}>
+              logoout
+            </button>
+          </div>
         )}
         </>
     );

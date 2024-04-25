@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 const API = "http://localhost:3000/api";
 
 
-export default function LoginForm ({ token, setToken }) {
+export default function LoginForm ({ token }) {
     const [ Email, setEmail ] = useState("");
     const [ Password, setPassword ] = useState("");
     const [error, setError] = useState(null);
@@ -12,7 +12,7 @@ export default function LoginForm ({ token, setToken }) {
     async function handleSubmit(e) {
         e.preventDefault();
         try {
-            const response = await fetch(`${API}/loginform`, {
+            const response = await fetch(`${API}/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

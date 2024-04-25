@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Link, Routes } from "react-router-dom";
-import { useState, useEffect } from "react";
+
 export default function Navigation({ token, SetToken }) {
     return(
         <div id="nav-container">
@@ -11,7 +11,6 @@ export default function Navigation({ token, SetToken }) {
                 <Link to="/Carts">Cart </Link>
                 <Link to="/Register">Register </Link>
                 <Link to="/Products">Products </Link>
-                <Link to="/SingleProduct">Single Item</Link>
             </nav>
         </div>
     );

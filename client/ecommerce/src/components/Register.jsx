@@ -41,6 +41,7 @@ export default function Register({ setToken }) {
         <>
             <div className="regcontainer">
                 <h2>Register for a New Account</h2>
+                
                 <form onSubmit={handleSubmit}>
                 <h2>Name</h2>
                 {error && <p>{error}</p>}

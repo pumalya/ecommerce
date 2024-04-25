@@ -24,22 +24,46 @@ export default function Carts({ token, setToken }) {
         fetchCarts();
     }, [userId]);
 
+
+    async function addToCart(userId) {
+        try {
+            const response = await fetch(`${API}/carts/${userId}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                available: false,
+                }),
+            });
+            const result = await response.json();
+            console.log(result);
+        } catch (error) {
+            console.error(error);
+        }
+    }
     return (
+
         <div>
             {carts && (
-                <ul>
+                <li>
                     <li className="producttitle">{carts.title}</li>
-                    <li className="productprice">{carts.author}</li>
+                    <li className="productprice">{carts.price}</li>
                     <li className="description">{carts.description}</li>
                     <li>
                         <img src={carts.coverimage} alt={carts.title} />
                     </li>
                     <li>{carts.available}</li>
                     <button onClick={async()=> {
-                        await addItemToCarts(productId);
-                    }}>Checkout</button>
-                </ul>
+                        await addToCart(productId);
+                    }}
+                    >
+                        Checkout
+                        </button>
+                </li>
             )}
         </div>
     );
 }
+

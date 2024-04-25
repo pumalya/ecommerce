@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 const API = "http://localhost:3000/api";
 
 
-export default function Products({token}) {
+export default function Products({ token }) {
     const [products, setProducts] = useState([]);
     const navigate = useNavigate();
 
@@ -15,7 +15,7 @@ export default function Products({token}) {
                 console.log(data);
                 setProducts(data);
             } catch(error) {
-                console.error(error);
+                console.error;
             }
         }
         fetchProducts();
@@ -23,11 +23,11 @@ export default function Products({token}) {
 
     const handleProductsClick = async (productId, userId)=> {
         try{
-            const response = await fetch(`${API}/cart/`, {
+            const response = await fetch(`${API}/carts/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${ token }`,
+                    Authorization: `Bearer ${ "token" }`,
                     body: JSON.stringify({
                         user_id: userId,
                         product_id: productId,
